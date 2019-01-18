@@ -24,9 +24,8 @@ function setup() {
 
 function draw() {
     background(255);
-    text("Am " + date + " ist der Sonnenaufgang um " + sunrise, 100, 100);
-    icon();
     createTitle();
+    createRectangle();
 }
 
 function createSearch() {
@@ -62,6 +61,50 @@ function gotWeather(weather) {
     img = loadImage(imgURL);
 }
 
-function icon() {
-    image(img, 200, 200);
+function createRectangle() {
+
+    colorMode(RGB);
+
+    // sun
+    let sunValue = 0.5;
+    let SunColorfrom = color('#fff0a8');
+    let SunColoeto = color('#f8b300');
+    let sun = lerpColor(SunColorfrom, SunColoeto, sunValue);
+
+
+    // niederschlag
+    let rainValue = 0.9;
+    let rainColorfrom = color('#a8d0e6');
+    let rainColoeto = color('#24305e');
+    let rain = lerpColor(rainColorfrom, rainColoeto, rainValue);
+
+
+    // temperatur
+    let tempValue = 0.2;
+    let tempColorfrom = color('#27FB6B');
+    let tempColoeto = color('#036D19');
+    let temp = lerpColor(tempColorfrom, tempColoeto, tempValue);
+
+
+    // wind
+    let windValue = 0.5;
+    let windColorfrom = color('#F397D6');
+    let windColoeto = color('#231942');
+    let wind = lerpColor(windColorfrom, windColoeto, windValue);
+
+    noStroke();
+    rect(100, 300, 400, 400);
+
+    fill(sun);
+    rect(100, 300, 200, 200);
+
+    fill(rain);
+    rect(300, 300, 200, 200);
+
+    fill(temp);
+    rect(100, 500, 200, 200);
+
+    fill(wind);
+    rect(300, 500, 200, 200);
+
 }
