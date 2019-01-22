@@ -1,36 +1,37 @@
-//Variablen definieren
-//Mit Werten gefüllt werden diese in der Funktion gotWeather
-let date;
-let img;
 let key = 'd3723b242a9a4d31be391638191101';
-
-let input;
-let button;
 
 let uv;
 let precip;
 let temp;
 let wind;
+
 let textCoordinates;
+let rectangleXSun;
+let rectangleXRain;
+let rectangleXTemp;
+let rectangleXWind;
 
+let currentWeather = [];
 let currentCities = [];
-let randomCityKey;
-
-let cities = ['Zürich', 'London', 'Tokyo', 'Berlin', 'Vancouver', 'Sydney'];
+let cities = ['Zürich', 'London', 'Tokyo', 'Berlin', 'Vancouver', 'Sydney', 'Stockholm', 'Helsinki', 'Beirut', 'Kapstadt', 'Edmonton', 'Montreal', 'Budapest', 'Rio De Janeiro'];
 
 function preload() {
     setCities();
     let url;
 
-    for (randomCityKey = 0; randomCityKey <= cities.length; randomCityKey++) {
-        url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+' + currentCities[randomCityKey] + '&days=1';
+    for (let cityKey = 0; cityKey <= 4; cityKey++) {
+        url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+' + currentCities[cityKey] + '&days=1';
         loadJSON(url, gotWeather);
     }
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    textCoordinates = 20;
+    textCoordinates = 0;
+    rectangleXSun = 0;
+    rectangleXRain = 100;
+    rectangleXTemp = 0;
+    rectangleXWind = 100;
     noLoop();
 }
 
@@ -40,68 +41,72 @@ function draw() {
 }
 
 function setCities() {
-    for (let i = 0; i <= cities.length; i++) {
+    for (let i = 0; i <= 4; i++) {
         let randomCity = random(cities);
         currentCities.push(randomCity);
     }
 }
 
 function gotWeather(weather) {
-    console.log('weather', weather.location);
-    uv = weather.current.uv;
-    precip = weather.current.precip_mm;
-    temp = weather.current.temp_c;
-    wind = weather.current.wind_kph;
+    currentWeather.push(weather);
 }
 
 function createRectangle() {
-
     colorMode(RGB);
 
-    // sun
-    let sunValue = uv;
-    let SunColorfrom = color('#fff0a8');
-    let SunColoeto = color('#f8b300');
-    let sun = lerpColor(SunColorfrom, SunColoeto, sunValue);
+    for (let currentCity of currentCities) {
+
+        const cityName = currentWeather.find(weather => weather.location.name === currentCity);
+
+        uv = cityName.current.uv;
+        precip = cityName.current.precip_mm;
+        temp = cityName.current.temp_c;
+        wind = cityName.current.wind_kph;
+
+        // sun
+        let sunValue = map(uv, 0, 10, 0, 1);
+        let SunColorfrom = color('#fff0a8');
+        let SunColoeto = color('#f8b300');
+        let sun = lerpColor(SunColorfrom, SunColoeto, sunValue);
 
 
-    // precip
-    let rainValue = precip;
-    let rainColorfrom = color('#a8d0e6');
-    let rainColoeto = color('#24305e');
-    let rain = lerpColor(rainColorfrom, rainColoeto, rainValue);
+        // precip
+        let rainValue = map(precip, 0, 3, 0, 1);
+        let rainColorfrom = color('#a8d0e6');
+        let rainColoeto = color('#24305e');
+        let rain = lerpColor(rainColorfrom, rainColoeto, rainValue);
 
 
-    // temperatur
-    let tempValue = temp / 100;
-    let tempColorfrom = color('#27FB6B');
-    let tempColoeto = color('#036D19');
-    let temperature = lerpColor(tempColorfrom, tempColoeto, tempValue);
+        // temperatur
+        let tempValue = map(temp, -35, 40, 0, 1);
+        let tempColorfrom = color('#99fbb8');
+        let tempColoeto = color('#035117');
+        let temperature = lerpColor(tempColorfrom, tempColoeto, tempValue);
 
 
-    // wind
-    let windValue = wind / 100;
-    let windColorfrom = color('#F397D6');
-    let windColoeto = color('#231942');
-    let windy = lerpColor(windColorfrom, windColoeto, windValue);
+        // wind
+        let windValue = map(wind, 0, 80, 0, 1);
+        let windColorfrom = color('#F397D6');
+        let windColoeto = color('#231942');
+        let windy = lerpColor(windColorfrom, windColoeto, windValue);
 
-    noStroke();
-
-    fill(sun);
-    rect(100, 200, 100, 100);
-
-    fill(rain);
-    rect(200, 200, 100, 100);
-
-    fill(temperature);
-    rect(100, 300, 100, 100);
-
-    fill(windy);
-    rect(200, 300, 100, 100);
+        noStroke();
 
 
-    for (let i = 0; i < cities.length; i++) {
-        console.log(currentCities);
-        text(currentCities[i], textCoordinates += 100, 500);
+        fill(sun);
+        rect(rectangleXSun += 400, 350, 100, 100);
+
+        fill(rain);
+        rect(rectangleXRain += 400, 350, 100, 100);
+
+        fill(temperature);
+        rect(rectangleXTemp += 400, 450, 100, 100);
+
+        fill(windy);
+        rect(rectangleXWind += 400, 450, 100, 100);
+
+        fill(0);
+        textSize(20);
+        text(cityName.location.name, textCoordinates += 400, 600);
     }
 }
