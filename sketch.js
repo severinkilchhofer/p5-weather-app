@@ -1,64 +1,57 @@
 //Variablen definieren
 //Mit Werten gefüllt werden diese in der Funktion gotWeather
-let sunrise;
-let sunset;
 let date;
 let img;
 let key = 'd3723b242a9a4d31be391638191101';
 
 let input;
 let button;
-let ort;
+
+let uv;
+let precip;
+let temp;
+let wind;
+let textCoordinates;
+
+let currentCities = [];
+let randomCityKey;
+
+let cities = ['Zürich', 'London', 'Tokyo', 'Berlin', 'Vancouver', 'Sydney'];
 
 function preload() {
-    let url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+Zürich&days=1';
-    loadJSON(url, gotWeather);
+    setCities();
+    let url;
+
+    for (randomCityKey = 0; randomCityKey <= cities.length; randomCityKey++) {
+        url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+' + currentCities[randomCityKey] + '&days=1';
+        loadJSON(url, gotWeather);
+    }
 }
 
 function setup() {
-    createCanvas(700, 700);
-    //Dokumentation
-    // https://www.apixu.com/doc/forecast.aspx
-    createSearch();
+    createCanvas(windowWidth, windowHeight);
+    textCoordinates = 20;
+    noLoop();
 }
 
 function draw() {
     background(255);
-    createTitle();
     createRectangle();
 }
 
-function createSearch() {
-    input = createInput();
-    input.position(20, 65);
-
-    button = createButton('suchen');
-    button.position(input.x + input.width, 65);
-    button.mousePressed(getOrt);
-}
-
-function getOrt() {
-    ort = input.value();
-    let url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+' + ort + '&days=1';
-
-    loadJSON(url, gotWeather);
-    createTitle(ort);
-    input.value('');
-}
-
-function createTitle() {
-    text(ort ? ort : "Zürich", 20, 250);
+function setCities() {
+    for (let i = 0; i <= cities.length; i++) {
+        let randomCity = random(cities);
+        currentCities.push(randomCity);
+    }
 }
 
 function gotWeather(weather) {
-    let imgURL;
-
-    sunrise = weather.forecast.forecastday[0].astro.sunrise;
-    sunset = weather.forecast.forecastday[0].astro.sunset;
-    date = weather.forecast.forecastday[0].date;
-
-    imgURL = 'http:' + weather.forecast.forecastday[0].day.condition.icon;
-    img = loadImage(imgURL);
+    console.log('weather', weather.location);
+    uv = weather.current.uv;
+    precip = weather.current.precip_mm;
+    temp = weather.current.temp_c;
+    wind = weather.current.wind_kph;
 }
 
 function createRectangle() {
@@ -66,45 +59,49 @@ function createRectangle() {
     colorMode(RGB);
 
     // sun
-    let sunValue = 0.5;
+    let sunValue = uv;
     let SunColorfrom = color('#fff0a8');
     let SunColoeto = color('#f8b300');
     let sun = lerpColor(SunColorfrom, SunColoeto, sunValue);
 
 
-    // niederschlag
-    let rainValue = 0.9;
+    // precip
+    let rainValue = precip;
     let rainColorfrom = color('#a8d0e6');
     let rainColoeto = color('#24305e');
     let rain = lerpColor(rainColorfrom, rainColoeto, rainValue);
 
 
     // temperatur
-    let tempValue = 0.2;
+    let tempValue = temp / 100;
     let tempColorfrom = color('#27FB6B');
     let tempColoeto = color('#036D19');
-    let temp = lerpColor(tempColorfrom, tempColoeto, tempValue);
+    let temperature = lerpColor(tempColorfrom, tempColoeto, tempValue);
 
 
     // wind
-    let windValue = 0.5;
+    let windValue = wind / 100;
     let windColorfrom = color('#F397D6');
     let windColoeto = color('#231942');
-    let wind = lerpColor(windColorfrom, windColoeto, windValue);
+    let windy = lerpColor(windColorfrom, windColoeto, windValue);
 
     noStroke();
-    rect(100, 300, 400, 400);
 
     fill(sun);
-    rect(100, 300, 200, 200);
+    rect(100, 200, 100, 100);
 
     fill(rain);
-    rect(300, 300, 200, 200);
+    rect(200, 200, 100, 100);
 
-    fill(temp);
-    rect(100, 500, 200, 200);
+    fill(temperature);
+    rect(100, 300, 100, 100);
 
-    fill(wind);
-    rect(300, 500, 200, 200);
+    fill(windy);
+    rect(200, 300, 100, 100);
 
+
+    for (let i = 0; i < cities.length; i++) {
+        console.log(currentCities);
+        text(currentCities[i], textCoordinates += 100, 500);
+    }
 }
