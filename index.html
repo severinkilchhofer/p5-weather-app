@@ -1,35 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>check weather</title>
+    <title>Worldwide Analogy</title>
 
 
-	<script src="libraries/p5.js"></script>
-	<script src="libraries/p5.dom.js"></script>
-	<script src="libraries/p5.sound.js"></script>
-	<script src="sketch.js"></script>
+    <script src="libraries/p5.js"></script>
+    <script src="libraries/p5.dom.js"></script>
+    <script src="libraries/p5.sound.js"></script>
+    <script src="sketch.js"></script>
 
-	<style>
-		body {
-			margin:0;
-			padding:0;
-			overflow: hidden;
-			font-family:"Helvetica";
-			line-height:140%;
-		}
-		canvas {
-			margin:auto;
-		}
 
-	</style>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: "Helvetica";
+            line-height: 140%;
+        }
+
+        canvas {
+            margin: auto;
+        }
+
+        #search-button {
+            width: 100px;
+            height: 40px;
+        }
+
+        #search-button svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        button:focus {
+            outline: 0;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body>
+<body style="background-color: rgb(30, 30, 30)">
 
-
-
+<div style="text-align: right">
+    <button onclick="location.reload();" id="search-button" style="background: transparent; border: none">
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg fill="#FFFFFF" width="100pt" height="100pt" version="1.1" viewBox="0 0 100 100"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="m95.199 25.102s-3.1016-14.801-16.5-20c-6.3008-2.3984-17.801-3.6016-29.102-3.6992-11.297-0.003906-22.797 1.1992-29.098 3.5977-13.5 5.1992-16.602 20.102-16.602 20.102-2 8.3984-2.6992 16.898-2.6016 24.398 0.003906 7.5 0.60156 16.102 2.6016 24.398 0 0 3.1016 14.801 16.5 20 6.3008 2.3984 17.801 3.6016 29.102 3.6992 11.301-0.10156 22.801-1.1992 29.102-3.6992 13.398-5.1992 16.5-20 16.5-20 2-8.3984 2.6992-16.898 2.6016-24.398 0.19531-7.6016-0.50391-16.102-2.5039-24.398zm-22.199 24.5c0 12.898-10.5 23.398-23.398 23.398-12.902 0-23.5-10.5-23.5-23.398l0.10156-1.1016c0.30078-5.8984 2.6992-11.301 6.8008-15.5 1.3008-1.3008 3.6992-1.3008 5 0 0.69922 0.69922 1 1.6016 1 2.5s-0.39844 1.8008-1 2.5c-4.3984 4.3984-5.8984 10.801-3.8984 16.699l0.19922 0.60156c2.3984 6.3984 8.5 10.602 15.301 10.602 9 0 16.301-7.3008 16.301-16.301 0-4.3008-1.6992-8.3984-4.6992-11.398v3.6992c0 2-1.6016 3.5-3.5 3.5-1.8984 0-3.5-1.6016-3.5-3.5l-0.007812-12.402c0-2 1.6016-3.5 3.5-3.5h11.801c2 0 3.5 1.6016 3.5 3.5 0 2-1.6016 3.5-3.5 3.5h-3.3008c4.3008 4.3984 6.8008 10.301 6.8008 16.602z"/>
+        </svg>
+    </button>
+</div>
 </body>
 </html>

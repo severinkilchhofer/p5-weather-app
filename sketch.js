@@ -6,10 +6,15 @@ let temp;
 let wind;
 
 let textCoordinates;
+let textCoordinates2;
 let rectangleXSun;
 let rectangleXRain;
 let rectangleXTemp;
 let rectangleXWind;
+let rectangleXSun2;
+let rectangleXRain2;
+let rectangleXTemp2;
+let rectangleXWind2;
 let rectangleXStart = 0;
 let rectangleXEnd = 0;
 
@@ -31,16 +36,27 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     textCoordinates = 0;
+    textCoordinates2 = 0;
+
     rectangleXSun = 0;
-    rectangleXRain = 100;
+    rectangleXRain = 150;
     rectangleXTemp = 0;
-    rectangleXWind = 100;
+    rectangleXWind = 150;
+
+    rectangleXSun2 = 0;
+    rectangleXRain2 = 150;
+    rectangleXTemp2 = 0;
+    rectangleXWind2 = 150;
     noLoop();
 }
 
 function draw() {
     background(30, 30, 30);
+
+
     createRectangle();
+
+    // createRectangleDown();
 
     // createCircles();
     // createDots();
@@ -65,9 +81,14 @@ function gotWeather(weather) {
 function createRectangle() {
     colorMode(RGB);
 
+    let upperRow = 0;
+    let lowerRow = 0;
+
     for (let currentCity of currentCities) {
 
-        const cityName = currentWeather.find(weather => weather.location.name === currentCity);
+        upperRow++;
+
+        let cityName = currentWeather.find(weather => weather.location.name === currentCity);
 
         uv = cityName.current.uv;
         precip = cityName.current.precip_mm;
@@ -101,24 +122,93 @@ function createRectangle() {
         let windColoeto = color('#004234');
         let windy = lerpColor(windColorfrom, windColoeto, windValue);
 
+
+        let rectangleWidth = 150;
+
+        let yHoehe1 = 50;
+        let yHoehe2 = yHoehe1 + rectangleWidth;
+
+        let yHoehe3 = 500;
+        let yHoehe4 = yHoehe3 + rectangleWidth;
+
+        let fontHoehe1 = 400;
+        let fontHoehe2 = 850;
+
         noStroke();
 
+        if (upperRow <= 3) {
 
-        fill(sun);
-        rect(rectangleXSun += 300, 350, 100, 100);
+            if (upperRow === 1) {
+                fill(sun);
+                rect(rectangleXSun += 150, yHoehe1, rectangleWidth, rectangleWidth);
 
-        fill(rain);
-        rect(rectangleXRain += 300, 350, 100, 100);
+                fill(rain);
+                rect(rectangleXRain += 150, yHoehe1, rectangleWidth, rectangleWidth);
 
-        fill(temperature);
-        rect(rectangleXTemp += 300, 450, 100, 100);
+                fill(temperature);
+                rect(rectangleXTemp += 150, yHoehe2, rectangleWidth, rectangleWidth);
 
-        fill(windy);
-        rect(rectangleXWind += 300, 450, 100, 100);
+                fill(windy);
+                rect(rectangleXWind += 150, yHoehe2, rectangleWidth, rectangleWidth);
 
-        fill(255);
-        textSize(20);
-        text(cityName.location.name, textCoordinates += 300, 600);
+                fill(255);
+                textSize(20);
+                text(cityName.location.name, textCoordinates += 150, fontHoehe1);
+            } else {
+                fill(sun);
+                console.log(rectangleXSun);
+                rect(rectangleXSun += 500, yHoehe1, rectangleWidth, rectangleWidth);
+
+                fill(rain);
+                rect(rectangleXRain += 500, yHoehe1, rectangleWidth, rectangleWidth);
+
+                fill(temperature);
+                rect(rectangleXTemp += 500, yHoehe2, rectangleWidth, rectangleWidth);
+
+                fill(windy);
+                rect(rectangleXWind += 500, yHoehe2, rectangleWidth, rectangleWidth);
+
+                fill(255);
+                textSize(20);
+                text(cityName.location.name, textCoordinates += 500, fontHoehe1);
+            }
+
+        } else {
+            lowerRow++;
+            if (lowerRow === 1) {
+                fill(sun);
+                rect(rectangleXSun2 += 150, yHoehe3, rectangleWidth, rectangleWidth);
+
+                fill(rain);
+                rect(rectangleXRain2 += 150, yHoehe3, rectangleWidth, rectangleWidth);
+
+                fill(temperature);
+                rect(rectangleXTemp2 += 150, yHoehe4, rectangleWidth, rectangleWidth);
+
+                fill(windy);
+                rect(rectangleXWind2 += 150, yHoehe4, rectangleWidth, rectangleWidth);
+
+                fill(255);
+                textSize(20);
+                text(cityName.location.name, textCoordinates2 += 150, fontHoehe2);
+            } else {
+                fill(sun);
+                rect(rectangleXSun2 += 500, yHoehe3, rectangleWidth, rectangleWidth);
+
+                fill(rain);
+                rect(rectangleXRain2 += 500, yHoehe3, rectangleWidth, rectangleWidth);
+
+                fill(temperature);
+                rect(rectangleXTemp2 += 500, yHoehe4, rectangleWidth, rectangleWidth);
+
+                fill(windy);
+                rect(rectangleXWind2 += 500, yHoehe4, rectangleWidth, rectangleWidth);
+
+                fill(255);
+                textSize(20);
+                text(cityName.location.name, textCoordinates2 += 500, fontHoehe2);
+            }
+        }
     }
 }
 
