@@ -5,8 +5,13 @@ let precip;
 let temp;
 let wind;
 
+let moonIcon;
+let sunIcon;
+
 let textCoordinates;
 let textCoordinates2;
+let iconCoordinates;
+let iconCoordinates2;
 let rectangleXSun;
 let rectangleXRain;
 let rectangleXTemp;
@@ -31,10 +36,15 @@ function preload() {
         url = 'https://api.apixu.com/v1/forecast.json?key=' + key + '&q=+' + currentCities[cityKey] + '&days=1';
         loadJSON(url, gotWeather);
     }
+
+    moonIcon = loadImage('assets/moon.svg'); // Load the image
+    sunIcon = loadImage('assets/sun.svg'); // Load the image
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    iconCoordinates = 0;
+    iconCoordinates2 = 0;
     textCoordinates = 0;
     textCoordinates2 = 0;
 
@@ -55,7 +65,6 @@ function draw() {
 
 
     createRectangle();
-
     // createRectangleDown();
 
     // createCircles();
@@ -89,6 +98,9 @@ function createRectangle() {
         upperRow++;
 
         let cityName = currentWeather.find(weather => weather.location.name === currentCity);
+
+        let day = cityName.current.is_day;
+        console.warn('day', day);
 
         uv = cityName.current.uv;
         precip = cityName.current.precip_mm;
@@ -125,14 +137,17 @@ function createRectangle() {
 
         let rectangleWidth = 150;
 
-        let yHoehe1 = 50;
+        let yHoehe1 = 0;
         let yHoehe2 = yHoehe1 + rectangleWidth;
 
-        let yHoehe3 = 500;
+        let yHoehe3 = 400;
         let yHoehe4 = yHoehe3 + rectangleWidth;
 
-        let fontHoehe1 = 400;
-        let fontHoehe2 = 850;
+        let fontHoehe1 = 345;
+        let fontHoehe2 = 745;
+
+        let iconHoehe1 = fontHoehe1 - 20;
+        let iconHoehe2 = fontHoehe2 - 20;
 
         noStroke();
 
@@ -154,9 +169,13 @@ function createRectangle() {
                 fill(255);
                 textSize(20);
                 text(cityName.location.name, textCoordinates += 150, fontHoehe1);
+                if (day === 1) {
+                    image(sunIcon, iconCoordinates += 420, iconHoehe1, 25, 25);
+                } else {
+                    image(moonIcon, iconCoordinates += 420, iconHoehe1, 30, 30);
+                }
             } else {
                 fill(sun);
-                console.log(rectangleXSun);
                 rect(rectangleXSun += 500, yHoehe1, rectangleWidth, rectangleWidth);
 
                 fill(rain);
@@ -171,6 +190,11 @@ function createRectangle() {
                 fill(255);
                 textSize(20);
                 text(cityName.location.name, textCoordinates += 500, fontHoehe1);
+                if (day === 1) {
+                    image(sunIcon, iconCoordinates += 500, iconHoehe1, 25, 25);
+                } else {
+                    image(moonIcon, iconCoordinates += 500, iconHoehe1, 30, 30);
+                }
             }
 
         } else {
@@ -191,6 +215,11 @@ function createRectangle() {
                 fill(255);
                 textSize(20);
                 text(cityName.location.name, textCoordinates2 += 150, fontHoehe2);
+                if (day === 1) {
+                    image(sunIcon, iconCoordinates2 += 420, iconHoehe2, 25, 25);
+                } else {
+                    image(moonIcon, iconCoordinates2 += 420, iconHoehe2, 30, 30);
+                }
             } else {
                 fill(sun);
                 rect(rectangleXSun2 += 500, yHoehe3, rectangleWidth, rectangleWidth);
@@ -207,6 +236,11 @@ function createRectangle() {
                 fill(255);
                 textSize(20);
                 text(cityName.location.name, textCoordinates2 += 500, fontHoehe2);
+                if (day === 1) {
+                    image(sunIcon, iconCoordinates2 += 500, iconHoehe2, 25, 25);
+                } else {
+                    image(moonIcon, iconCoordinates2 += 500, iconHoehe2, 30, 30);
+                }
             }
         }
     }
@@ -263,7 +297,6 @@ function createCircles() {
         let strokeRain = rainValue * 20;
         let strokeTemperature = tempValue * 2;
         let strokeWind = windValue / 10;
-        console.log(windValue);
 
         //sun
         noFill();
